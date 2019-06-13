@@ -67,9 +67,11 @@
     <Compile Include="Assets\Scripts\Character.cs" />
     <Compile Include="Assets\Scripts\Detection.cs" />
     <Compile Include="Assets\Scripts\followKillZone.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\movVertical.cs" />
     <Compile Include="Assets\Scripts\Navigator.cs" />
     <Compile Include="Assets\Scripts\rotation.cs" />
+    <Compile Include="Assets\Scripts\Strings.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />

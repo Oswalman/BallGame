@@ -22,7 +22,7 @@ public class Character : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(waiting());
+      
         rb = GetComponent<Rigidbody2D>();
         source = GetComponent<AudioSource>();
         timer = 0;
@@ -37,7 +37,11 @@ public class Character : MonoBehaviour
     }
     private IEnumerator waiting()
     {
-        yield return new WaitForSeconds(255f);
+        Sound = (AudioClip)Resources.Load("Audio/morir", typeof(AudioClip));
+        source.PlayOneShot(Sound, 2f);
+        yield return new WaitWhile(()=>source.isPlaying);
+        Scene escena = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(escena.name);
         Debug.Log("entro a Done waiting");
         // Destroy(gameObject);
     }
@@ -54,10 +58,11 @@ public class Character : MonoBehaviour
         }
         else if (collision.CompareTag("KillZone"))
         {
+            StartCoroutine(waiting());
 
-            Sound = (AudioClip)Resources.Load("Audio/morir", typeof(AudioClip));
-            source.PlayOneShot(Sound, 2f);
+
             //waiting();
+            /*
             while (!timerReached)
             {
                 timer += Time.deltaTime;
@@ -72,15 +77,14 @@ public class Character : MonoBehaviour
                     timerReached = true;
                 }
 
-            }
+            }*/
 
 
 
 
 
-            Scene escena = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(escena.name);
-            
+
+
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
