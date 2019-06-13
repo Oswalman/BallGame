@@ -9,15 +9,24 @@ public class Character : MonoBehaviour
     public float speed;
     [Header("Fuerza de salto: ")]
     public float jump;
+   
+   
     private Rigidbody2D rb;
+    public AudioClip Sound;
     public float distGround;
-
+    private AudioSource source;
     private bool isOnGround;
+    //Reloj
+    bool timerReached;
+    float timer;
     // Start is called before the first frame update
     void Start()
     {
+        StartCoroutine(waiting());
         rb = GetComponent<Rigidbody2D>();
-
+        source = GetComponent<AudioSource>();
+        timer = 0;
+        
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -25,6 +34,12 @@ public class Character : MonoBehaviour
         {
             isOnGround = true;
         }
+    }
+    private IEnumerator waiting()
+    {
+        yield return new WaitForSeconds(255f);
+        Debug.Log("entro a Done waiting");
+        // Destroy(gameObject);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -39,9 +54,33 @@ public class Character : MonoBehaviour
         }
         else if (collision.CompareTag("KillZone"))
         {
+
+            Sound = (AudioClip)Resources.Load("Audio/morir", typeof(AudioClip));
+            source.PlayOneShot(Sound, 2f);
+            //waiting();
+            while (!timerReached)
+            {
+                timer += Time.deltaTime;
+             
+                //Debug.Log(timer);
+                if (!timerReached && timer > 20000f)
+                {
+                    Debug.Log("Done waiting");
+
+                    
+                    //Set to false so that We don't run this again
+                    timerReached = true;
+                }
+
+            }
+
+
+
+
+
             Scene escena = SceneManager.GetActiveScene();
             SceneManager.LoadScene(escena.name);
-
+            
         }
     }
     private void OnCollisionExit2D(Collision2D collision)
@@ -60,11 +99,13 @@ public class Character : MonoBehaviour
     {
         float movHorizontal = Input.GetAxis("Horizontal");
         Vector2 movimiento = new Vector2(movHorizontal, 0f);
-        rb.AddForce(movimiento*speed*2f);
-        rb.rotation=
+        rb.AddForce(movimiento * speed * 2f);
+        rb.rotation -= movHorizontal*speed;
         if (Input.GetButtonDown("Jump") && isOnGround) //Devuelve verdadero en  el frame que se oprimió
         {
-
+            Sound = (AudioClip)Resources.Load("Audio/saltar", typeof(AudioClip));
+            source.PlayOneShot(Sound, 2f);
+           
             rb.AddForce(Vector2.up*jump*50f,ForceMode2D.Force);
         }
         /*
